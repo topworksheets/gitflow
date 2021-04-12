@@ -55,7 +55,11 @@ _finish_from_develop() {
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-		require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
+        if flag force_merge; then
+            require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
+        else
+            require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
+        fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$MASTER_BRANCH"; then
 		if flag ff_master; then
@@ -81,11 +85,19 @@ _finish_from_develop() {
 				fi
 			fi
 		else
-			require_branches_equal "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
+	        if flag force_merge; then
+                require_branches_equal_force "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
+            else
+                require_branches_equal "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
+            fi
 		fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$DEVELOP_BRANCH"; then
-		require_branches_equal "$DEVELOP_BRANCH" "$ORIGIN/$DEVELOP_BRANCH"
+		if flag force_merge; then
+            require_branches_equal_force "$DEVELOP_BRANCH" "$ORIGIN/$DEVELOP_BRANCH"
+        else
+            require_branches_equal "$DEVELOP_BRANCH" "$ORIGIN/$DEVELOP_BRANCH"
+        fi
 	fi
 
 	if noflag notag; then
@@ -287,10 +299,18 @@ _finish_base() {
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-		require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
+		if flag force_merge; then
+            require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
+        else
+            require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
+        fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$BASE_BRANCH"; then
-		require_branches_equal "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
+		if flag force_merge; then
+            require_branches_equal_force "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
+        else
+            require_branches_equal "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
+        fi
 	fi
 
 	if noflag notag; then
@@ -849,10 +869,18 @@ S,[no]squash 		Squash release during merge
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-		require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
+        if flag force_merge; then
+            require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
+        else
+            require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
+        fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$MASTER_BRANCH"; then
-		require_branches_equal "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
+	    if flag force_merge; then
+            require_branches_equal_force "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
+        else
+            require_branches_equal "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
+        fi
 	fi
 
 	run_pre_hook "$VERSION_PREFIX$VERSION" "$ORIGIN" "$BRANCH"
