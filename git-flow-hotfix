@@ -175,14 +175,18 @@ Start new hotfix branch named <version>, optionally base it on <base> instead of
 h,help!           Show this help
 showcommands!     Show git commands while executing them
 F,[no]fetch       Fetch from origin before performing local operation
+e,[no]force_pull     Force pull from remote if diverged from local
+
 "
 	local base
 
 	# Define flags
 	DEFINE_boolean 'fetch' false "fetch from $ORIGIN before performing finish" F
+	DEFINE_boolean 'force_pull' false "force pull from remote if diverged from local" e
 
 	# Override defaults with values from config
 	gitflow_override_flag_boolean   "hotfix.start.fetch"   "fetch"
+	gitflow_override_flag_boolean   "hotfix.start.force-pull"     "force_pull"
 
 	# Parse arguments
 	parse_args "$@"
@@ -216,7 +220,11 @@ F,[no]fetch       Fetch from origin before performing local operation
 	require_branch_absent "$BRANCH"
 	require_tag_absent "$VERSION_PREFIX$VERSION"
 	if git_remote_branch_exists "$ORIGIN/$base"; then
-		require_branches_equal "$base" "$ORIGIN/$base"
+	    if flag force_pull; then
+            require_branches_equal_force "$base" "$ORIGIN/$base"
+        else
+            require_branches_equal "$base" "$ORIGIN/$base"
+        fi
 	fi
 
 	run_pre_hook "$VERSION_PREFIX$VERSION" "$ORIGIN" "$BRANCH" "$base"
@@ -395,7 +403,7 @@ n,[no]notag           Don't tag this hotfix
 b,[no]nobackmerge     Don't back-merge master, or tag if applicable, in develop
 S,[no]squash          Squash hotfix during merge
 T,tagname!            Use given tag name
-e,[no]force_merge     Force merge remote branches before finish if diverged
+e,[no]force_pull      Force pull from remote if diverged from local
 "
 	local opts commit keepmsg remotebranchdeleted localbranchdeleted
 
@@ -415,7 +423,7 @@ e,[no]force_merge     Force merge remote branches before finish if diverged
 	DEFINE_boolean 'squash' false "squash release during merge" S
 	DEFINE_boolean 'squash-info' false "add branch info during squash"
 	DEFINE_string  'tagname' "" "use the given tag name" T
-	DEFINE_boolean 'force_merge' false "force merge remote branches before finish if diverged" e
+	DEFINE_boolean 'force_pull' false "force pull from remote if diverged from local" e
 
 	# Override defaults with values from config
 	gitflow_override_flag_boolean   "hotfix.finish.fetch"          "fetch"
@@ -432,7 +440,7 @@ e,[no]force_merge     Force merge remote branches before finish if diverged
 	gitflow_override_flag_string    "hotfix.finish.signingkey"     "signingkey"
 	gitflow_override_flag_string    "hotfix.finish.message"        "message"
 	gitflow_override_flag_string    "hotfix.finish.messagefile"    "messagefile"
-	gitflow_override_flag_boolean   "hotfix.finish.force-merge"    "force_merge"
+	gitflow_override_flag_boolean   "hotfix.finish.force-pull"     "force_pull"
 
 	# Parse arguments
 	parse_args "$@"
@@ -485,14 +493,14 @@ e,[no]force_merge     Force merge remote branches before finish if diverged
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-		if flag force_merge; then
+		if flag force_pull; then
             require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
         else
             require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
         fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$BASE_BRANCH"; then
-	    if flag force_merge; then
+	    if flag force_pull; then
             require_branches_equal_force "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
         else
             require_branches_equal "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
@@ -500,7 +508,7 @@ e,[no]force_merge     Force merge remote branches before finish if diverged
 	fi
 	if [ "$BASE_BRANCH" = "$MASTER_BRANCH" ]; then
 		if git_remote_branch_exists "$ORIGIN/$DEVELOP_BRANCH"; then
-		    if flag force_merge; then
+		    if flag force_pull; then
                 require_branches_equal_force "$DEVELOP_BRANCH" "$ORIGIN/$DEVELOP_BRANCH"
             else
                 require_branches_equal "$DEVELOP_BRANCH" "$ORIGIN/$DEVELOP_BRANCH"
