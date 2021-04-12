@@ -184,14 +184,17 @@ Start new feature <name>, optionally basing it on <base> instead of <develop>
 h,help!          Show this help
 showcommands!    Show git commands while executing them
 F,[no]fetch      Fetch from origin before performing local operation
+e,[no]force_pull       Force pull from remote if diverged from local
 "
 	local base
 
 	# Define flags
 	DEFINE_boolean 'fetch' false 'fetch from origin before performing local operation' F
+	DEFINE_boolean 'force_pull' false "force pull from remote if diverged from local" e
 
 	# Override defaults with values from config
 	gitflow_override_flag_boolean   "feature.start.fetch"   "fetch"
+	gitflow_override_flag_boolean   "feature.start.force-pull"  "force_pull"
 
 	# Parse arguments
 	parse_args "$@"
@@ -212,7 +215,11 @@ F,[no]fetch      Fetch from origin before performing local operation
 	# If the origin branch counterpart exists, assert that the local branch
 	# isn't behind it (to avoid unnecessary rebasing)
 	if git_remote_branch_exists "$ORIGIN/$base"; then
-		require_branches_equal "$base" "$ORIGIN/$base"
+        if flag force_pull; then
+            require_branches_equal_force "$base" "$ORIGIN/$base"
+        else
+            require_branches_equal "$base" "$ORIGIN/$base"
+        fi
 	fi
 
 	run_pre_hook "$NAME" "$ORIGIN" "$BRANCH" "$base"
@@ -253,7 +260,7 @@ keeplocal!             Keep the local branch
 D,[no]force_delete     Force delete feature branch after finish
 S,[no]squash           Squash feature during merge
 no-ff!                 Never fast-forward during the merge
-e,[no]force_merge      Force merge develop branch before finish if diverged
+e,[no]force_pull       Force pull from remote if diverged from local
 "
 	local finish_base
 
@@ -269,7 +276,7 @@ e,[no]force_merge      Force merge develop branch before finish if diverged
 	DEFINE_boolean 'squash' false "squash feature during merge" S
 	DEFINE_boolean 'squash-info' false "add branch info during squash"
 	DEFINE_boolean 'no-ff!' false "Don't fast-forward ever during merge "
-	DEFINE_boolean 'force_merge' false "force merge (develop) branch before finish if diverged" e
+	DEFINE_boolean 'force_pull' false "force pull from remote if diverged from local" e
 
 	# Override defaults with values from config
 	gitflow_override_flag_boolean   "feature.finish.fetch"             "fetch"
@@ -283,7 +290,7 @@ e,[no]force_merge      Force merge develop branch before finish if diverged
 	gitflow_override_flag_boolean   "feature.finish.squash"            "squash"
 	gitflow_override_flag_boolean   "feature.finish.squash-info"       "squash_info"
 	gitflow_override_flag_boolean   "feature.finish.no-ff"             "no_ff"
-	gitflow_override_flag_boolean   "feature.finish.force-merge"       "force_merge"
+	gitflow_override_flag_boolean   "feature.finish.force-pull"        "force_pull"
 
 	# Parse arguments
 	parse_args "$@"
@@ -363,14 +370,14 @@ e,[no]force_merge      Force merge develop branch before finish if diverged
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-        if flag force_merge; then
+        if flag force_pull; then
             require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
         else
             require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
         fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$BASE_BRANCH"; then
-	    if flag force_merge; then
+	    if flag force_pull; then
             require_branches_equal_force "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
         else
             require_branches_equal "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"

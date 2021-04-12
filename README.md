@@ -30,21 +30,23 @@ git config gitflow.multi-hotfix yes
 git config gitflow.showcommands yes
 
 git config gitflow.feature.start.fetch yes
+git config gitflow.feature.start.force-pull yes
 git config gitflow.feature.finish.squash yes
 git config gitflow.feature.finish.rebase yes
 git config gitflow.feature.finish.push yes
 git config gitflow.feature.finish.force-delete yes
-git config gitflow.feature.finish.force-merge yes
+git config gitflow.feature.finish.force-pull yes
 git config gitflow.feature.rebase.fetch yes
 
 git config gitflow.hotfix.start.fetch yes
+git config gitflow.hotfix.start.force-pull yes
 git config gitflow.hotfix.finish.fetch yes
 git config gitflow.hotfix.finish.squash yes
 git config gitflow.hotfix.finish.notag yes
 git config gitflow.hotfix.finish.nobackmerge yes
 git config gitflow.hotfix.finish.push yes
 git config gitflow.hotfix.finish.force-delete yes
-git config gitflow.hotfix.finish.force-merge yes
+git config gitflow.hotfix.finish.force-pull yes
 git config gitflow.hotfix.rebase.fetch yes
 ```
 

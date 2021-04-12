@@ -55,7 +55,7 @@ _finish_from_develop() {
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-        if flag force_merge; then
+        if flag force_pull; then
             require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
         else
             require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
@@ -85,7 +85,7 @@ _finish_from_develop() {
 				fi
 			fi
 		else
-	        if flag force_merge; then
+	        if flag force_pull; then
                 require_branches_equal_force "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
             else
                 require_branches_equal "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
@@ -93,7 +93,7 @@ _finish_from_develop() {
 		fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$DEVELOP_BRANCH"; then
-		if flag force_merge; then
+		if flag force_pull; then
             require_branches_equal_force "$DEVELOP_BRANCH" "$ORIGIN/$DEVELOP_BRANCH"
         else
             require_branches_equal "$DEVELOP_BRANCH" "$ORIGIN/$DEVELOP_BRANCH"
@@ -299,14 +299,14 @@ _finish_base() {
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-		if flag force_merge; then
+		if flag force_pull; then
             require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
         else
             require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
         fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$BASE_BRANCH"; then
-		if flag force_merge; then
+		if flag force_pull; then
             require_branches_equal_force "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
         else
             require_branches_equal "$BASE_BRANCH" "$ORIGIN/$BASE_BRANCH"
@@ -871,14 +871,14 @@ S,[no]squash 		Squash release during merge
 
 	# Check if the local branches have all the commits from the remote branches
 	if git_remote_branch_exists "$ORIGIN/$BRANCH"; then
-        if flag force_merge; then
+        if flag force_pull; then
             require_branches_equal_force "$BRANCH" "$ORIGIN/$BRANCH"
         else
             require_branches_equal "$BRANCH" "$ORIGIN/$BRANCH"
         fi
 	fi
 	if git_remote_branch_exists "$ORIGIN/$MASTER_BRANCH"; then
-	    if flag force_merge; then
+	    if flag force_pull; then
             require_branches_equal_force "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
         else
             require_branches_equal "$MASTER_BRANCH" "$ORIGIN/$MASTER_BRANCH"
