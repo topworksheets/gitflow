@@ -1,98 +1,52 @@
-# git-flow (AVH Edition)
+# git-flow (TopWorksheets Edition)
 
 A collection of Git extensions to provide high-level repository operations
 for Vincent Driessen's [branching model](http://nvie.com/git-model "original
-blog post"). This fork adds functionality not added to the original branch.
+blog post"). This fork adds functionality not added to the original branch and
+customizations done by TopWorksheets.
 
-
-## Getting started
-
-For the best introduction to get started with `git flow`, please read Jeff
-Kreeftmeijer's blog post:
-
-[http://jeffkreeftmeijer.com/2010/why-arent-you-using-git-flow/](http://jeffkreeftmeijer.com/2010/why-arent-you-using-git-flow/)
-
-Or have a look at one of these screen casts:
-
-* [How to use a scalable Git branching model called git-flow](http://buildamodule.com/video/change-management-and-version-control-deploying-releases-features-and-fixes-with-git-how-to-use-a-scalable-git-branching-model-called-gitflow) (by Build a Module)
-* [A short introduction to git-flow](http://vimeo.com/16018419) (by Mark Derricutt)
-* [On the path with git-flow](https://vimeo.com/codesherpas/on-the-path-gitflow) (by Dave Bock)
-
-A quick cheatsheet was made by Daniel Kummer:
-
-[http://danielkummer.github.io/git-flow-cheatsheet/](http://danielkummer.github.io/git-flow-cheatsheet/)
 
 ## Installing git-flow
 
-See the Wiki for up-to-date [Installation Instructions](https://github.com/petervanderdoes/gitflow-avh/wiki/Installation).
+Use the following command to install the latest stable version:
+
+```shell
+curl -sL https://github.com/topworksheets/gitflow/raw/master/contrib/gitflow-installer.sh | sudo bash -s install stable
+```
 
 
 ## Integration with your shell
 
-For those who use the [Bash](http://www.gnu.org/software/bash/) or [ZSH](http://www.zsh.org)
-shell, you can use my [fork of git-flow-completion](https://github.com/petervanderdoes/git-flow-completion)
-which includes several additions for git-flow (AVH Edition), or you can use the
-original [git-flow-completion](http://github.com/bobthecow/git-flow-completion)
-project by [bobthecow](http://github.com/bobthecow). Both offer tab-completion
-for git-flow subcommands and branch names with my fork including tab-completion
-for the commands not found in the original git-flow.
+Use this [fork of git-flow-completion](https://github.com/petervanderdoes/git-flow-completion)
+which offers tab-completion for git-flow subcommands and branch names.
 
 
-## FAQ
+## Settings
 
-* See the [FAQ](http://github.com/petervanderdoes/gitflow-avh/wiki/FAQ) section
-of the project Wiki.
-* Version Numbering Scheme.  
-Starting with version 1.0, the project uses the following scheme:
-\<MAJOR\>.\<MINOR\>.\<REVISION\>\
-* AVH is the acronym of "A VirtualHome"
-
-## Please help out
-
-This project is under constant development. Feedback and suggestions are very
-welcome and I encourage you to use the [Issues
-list](http://github.com/petervanderdoes/gitflow-avh/issues) on Github to provide that
-feedback.
-
-Feel free to fork this repository and to commit your additions. For a list of
-all contributors, please see the [AUTHORS](AUTHORS) file.
-
-Any questions, tips, or general discussion can be posted to the Google group:
-[http://groups.google.com/group/gitflow-users](http://groups.google.com/group/gitflow-users)
-This is the original group set up to support the nvie branch, but I am monitoring
-the list as well for any questions related to my version.
-When you do post a question on the list please indicate which version you are,
-using the complete version number.
-
-## Contributing
-
-Fork the repository.  Then, run:
+These are the settings that have to be applied after installing the scripts.
 
 ```shell
-git clone -b master git@github.com:<username>/gitflow-avh.git
-cd gitflow-avh
+git config gitflow.multi-hotfix yes
+git config gitflow.showcommands yes
+
+git config gitflow.feature.start.fetch yes
+git config gitflow.feature.finish.squash yes
+git config gitflow.feature.finish.rebase yes
+git config gitflow.feature.finish.push yes
+git config gitflow.feature.finish.force-delete yes
+git config gitflow.feature.finish.force-merge yes
+git config gitflow.feature.rebase.fetch yes
+
+git config gitflow.hotfix.start.fetch yes
+git config gitflow.hotfix.finish.fetch yes
+git config gitflow.hotfix.finish.squash yes
+git config gitflow.hotfix.finish.notag yes
+git config gitflow.hotfix.finish.nobackmerge yes
+git config gitflow.hotfix.finish.push yes
+git config gitflow.hotfix.finish.force-delete yes
+git config gitflow.hotfix.finish.force-merge yes
+git config gitflow.hotfix.rebase.fetch yes
 ```
-
-The `-b master` switch has to be added since the fork operation automatically
-clones the `develop` branch of the official gitflow repository and cloning it
-results in a local repository with just a `develop` branch.
-
-If you do not have gitflow installed yet install it by running `make && make install`.
-
-After that initialize the local gitflow repository with gitflow itself:
-
-```shell
-git flow init -d
-git flow feature start <your feature>
-```
-
-Then, do work and commit your changes.
-
-```shell
-git flow feature publish <your feature>
-```
-
-When done, open a pull request to your feature branch.
 
 ## License terms
 
@@ -227,18 +181,6 @@ git flow hotfix finish
 ### Using Hooks and Filters
 
 For a wide variety of commands hooks or filters can be called before and after
-the command.  
-The files should be placed in .git/hooks  
+the command.
+The files should be placed in .git/hooks
 In the directory hooks you can find examples of all the hooks available.
-
-## Showing your appreciation
-
-Of course, the best way to show your appreciation for the git-flow tool itself
-remains contributing to the community.  If you'd like to show your appreciation
-in another way, however, consider donating through PayPal:
-
-[![PayPal][2]][1]
-
-[1]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=S85FXJ9EBHAF2&lc=US&item_name=gitflow&item_number=gitflow&no_note=0&cn=Add%20special%20instructions%20to%20the%20seller&no_shipping=1&rm=1&return=https%3a%2f%2fgithub%2ecom%2fpetervanderdoes%2fgitflow&cancel_return=https%3a%2f%2fgithub%2ecom%2fpetervanderdoes%2fgitflow&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted
-
-[2]: https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif
