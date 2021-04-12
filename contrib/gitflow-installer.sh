@@ -28,7 +28,7 @@ if [ -z "$REPO_NAME" ] ; then
 fi
 
 if [ -z "$REPO_HOME" ] ; then
-	REPO_HOME="https://github.com/petervanderdoes/gitflow-avh.git"
+	REPO_HOME="https://github.com/topworksheets/gitflow.git"
 fi
 
 EXEC_PREFIX="$PREFIX"
@@ -37,7 +37,7 @@ DATAROOTDIR="$PREFIX/share"
 DOCDIR="$DATAROOTDIR/doc/gitflow"
 
 EXEC_FILES="git-flow"
-SCRIPT_FILES="git-flow-init git-flow-feature git-flow-bugfix git-flow-hotfix git-flow-release git-flow-support git-flow-version gitflow-common gitflow-shFlags git-flow-config"
+SCRIPT_FILES="git-flow-init git-flow-feature git-flow-bugfix git-flow-hotfix git-flow-release git-flow-support git-flow-version gitflow-common gitflow-shFlags git-flow-config git-flow-log"
 HOOK_FILES="$REPO_NAME/hooks/*"
 
 
@@ -91,7 +91,7 @@ install)
 		cd "$REPO_NAME"
 		git checkout tags/$3
 		cd "$OLDPWD"
-		;;		
+		;;
 	*)
 		usage
 		exit
